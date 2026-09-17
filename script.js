@@ -369,7 +369,11 @@ function iniciarMapaEstelar() {
             skyContainer,
             SKY,
             {
-                planets: false
+                planets: true,
+                conNameKey: 'e',
+                dsos: false,
+                labels: false,
+                milkyway: false,
             }
         );
 
@@ -396,3 +400,27 @@ function prepareStarMode() {
     }
 
 }
+
+const CHUBUT_LAT = -43.30;
+const CHUBUT_LON = -65.10;
+
+function actualizarCielo() {
+    const fechaSeleccionada = starDate.value; // Devuelve "YYYY-MM-DD"
+    
+    if (fechaSeleccionada) {
+      const hora = starTime.value + ":00"; // Hora por defecto si no se selecciona ninguna
+      console.log(hora);
+      // Creamos el objeto Date agregando una hora por defecto
+      const objetoFecha = new Date(`${fechaSeleccionada}T${hora}`);
+      
+      // Cambiamos el motor al modo Horizonte con la ubicación y fecha elegidas
+      starEngine.setHorizon(CHUBUT_LAT, CHUBUT_LON, objetoFecha);
+      
+      // Opcional: Apuntamos la cámara hacia el cenit (el centro del cielo arriba tuyo)
+      // Azimut 180 (Sur) y Altura 45 grados
+      starEngine.lookAtAltAz(180, 45, 90); 
+    }
+  }
+
+  // Escuchamos cuando el usuario cambia la fecha en el input
+  starDate.addEventListener("change", actualizarCielo);
