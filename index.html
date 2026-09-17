@@ -1,0 +1,947 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>MAPARTE - Generador de láminas cartográficas</title>
+
+    <link
+        rel="stylesheet"
+        href="style.css"
+    >
+
+    <link
+        rel="stylesheet"
+        href="https://unpkg.com/maplibre-gl@5/dist/maplibre-gl.css"
+    >
+
+</head>
+
+
+<body>
+
+
+    <!-- =========================
+         HEADER
+    ========================== -->
+
+    <header class="header">
+
+        <div class="logo">
+
+            <img
+                src="maparte.png"
+                alt="MAPARTE"
+            >
+
+        </div>
+
+        <div class="header-subtitle">
+
+            Generador de láminas cartográficas
+
+        </div>
+
+    </header>
+
+
+
+    <!-- =========================
+         APLICACIÓN
+    ========================== -->
+
+    <main class="app">
+
+
+        <!-- =========================
+             PANEL DE CONTROLES
+        ========================== -->
+
+        <aside class="controls">
+
+
+            <h1>
+                Diseñá tu mapa
+            </h1>
+
+
+            <p class="intro">
+
+                Diseñá una lámina de la ciudad o memento que atesores. 
+                Para regalar o regalarte. 
+            </p>
+
+
+
+            <!-- =========================
+                 SELECTOR DE MODO
+            ========================== -->
+
+            <section class="mode-section">
+
+                <h2>
+                    ¿Qué querés crear?
+                </h2>
+
+
+                <div class="mode-options">
+
+
+                    <button
+                        type="button"
+                        id="geographicMode"
+                        class="mode-option active"
+                    >
+
+                        <span class="mode-icon">
+                            🗺️
+                        </span>
+
+                        <span class="mode-title">
+                           Mapa geográfico
+                        </span>
+
+                        <span class="mode-description">
+                            Ciudades y lugares
+                        </span>
+
+                    </button>
+
+
+
+                    <button
+                        type="button"
+                        id="starMode"
+                        class="mode-option"
+                    >
+
+                        <span class="mode-icon">
+                            ✨
+                        </span>
+
+                        <span class="mode-title">
+                            Mapa estelar
+                        </span>
+
+                        <span class="mode-description">
+                            El cielo de un momento
+                        </span>
+
+                    </button>
+
+
+                </div>
+
+            </section>
+
+            <div id="starControls" style="display: none;">
+
+                <section class="control-section">
+
+                    <h2>
+                        Ubicación
+                    </h2>
+
+                    <label for="starCity">
+                        Ciudad o localidad
+                    </label>
+
+                    <input
+                        type="text"
+                        id="starCity"
+                        placeholder="Ej. Trelew"
+                    >
+
+                    <button
+                        type="button"
+                        id="starSearchButton"
+                    >
+                        Buscar lugar
+                    </button>
+
+                </section>
+
+
+                <section class="control-section">
+
+                    <h2>
+                        Momento
+                    </h2>
+
+                    <label for="starDate">
+                        Fecha
+                    </label>
+
+                    <input
+                        type="date"
+                        id="starDate"
+                    >
+
+
+                    <label
+                        for="starTime"
+                        class="star-time-label"
+                    >
+                        Hora
+                    </label>
+
+                    <input
+                        type="time"
+                        id="starTime"
+                        value="22:00"
+                    >
+
+                </section>
+
+
+                <section class="control-section">
+
+                    <h2>
+                        Texto
+                    </h2>
+
+                    <label for="starTitle">
+                        Título
+                    </label>
+
+                    <input
+                        type="text"
+                        id="starTitle"
+                        placeholder="Ej. TRELEW"
+                    >
+
+                </section>
+
+
+                <section class="control-section">
+
+                    <h2>
+                        Elementos del cielo
+                    </h2>
+
+                    <label class="checkbox">
+
+                        <input
+                            type="checkbox"
+                            id="showConstellations"
+                            checked
+                        >
+
+                        <span>
+                            Mostrar constelaciones
+                        </span>
+
+                    </label>
+
+
+                    <label class="checkbox">
+
+                        <input
+                            type="checkbox"
+                            id="showConstellationNames"
+                            checked
+                        >
+
+                        <span>
+                            Mostrar nombres
+                        </span>
+
+                    </label>
+
+                </section>
+
+
+                <section class="control-section">
+
+                    <h2>
+                        Forma del mapa
+                    </h2>
+
+                    <div class="shape-options">
+
+                        <button
+                            type="button"
+                            class="shape-option active"
+                        >
+
+                            <span class="shape-icon">
+                                ■
+                            </span>
+
+                            <span>
+                                Cuadrado
+                            </span>
+
+                        </button>
+
+
+                        <button
+                            type="button"
+                            class="shape-option"
+                        >
+
+                            <span class="shape-icon">
+                                ●
+                            </span>
+
+                            <span>
+                                Circular
+                            </span>
+
+                        </button>
+
+                    </div>
+
+                </section>
+
+
+                <section class="control-section">
+
+                    <button
+                        type="button"
+                        class="generate-button"
+                    >
+                        GENERAR LÁMINA
+                    </button>
+
+                </section>
+
+            </div>
+
+            <!-- =========================
+                 CONTROLES GEOGRÁFICOS
+            ========================== -->
+
+            <div id="geographicControls">
+
+
+                <!-- =========================
+                     UBICACIÓN
+                ========================== -->
+
+                <section class="control-section">
+
+                    <h2>
+                        Ubicación
+                    </h2>
+
+
+                    <label for="city">
+                        Ciudad o localidad
+                    </label>
+
+
+                    <input
+                        type="text"
+                        id="city"
+                        placeholder="Ej. Trelew"
+                    >
+
+
+                    <button
+                        type="button"
+                        id="searchButton"
+                    >
+                        Buscar lugar
+                    </button>
+
+                </section>
+
+
+
+                <!-- =========================
+                     COLORES
+                ========================== -->
+
+                <section class="control-section">
+
+                    <h2>
+                        Colores
+                    </h2>
+
+
+                    <div class="color-control">
+
+                        <label for="backgroundColor">
+                            Fondo
+                        </label>
+
+                        <input
+                            type="color"
+                            id="backgroundColor"
+                            value="#FFF9FB"
+                        >
+
+                    </div>
+
+
+                    <div class="color-control">
+
+                        <label for="terrainColor">
+                            Terreno
+                        </label>
+
+                        <input
+                            type="color"
+                            id="terrainColor"
+                            value="#E8E8E8"
+                        >
+
+                    </div>
+
+
+                    <div class="color-control">
+
+                        <label for="waterColor">
+                            Agua
+                        </label>
+
+                        <input
+                            type="color"
+                            id="waterColor"
+                            value="#A9DDD6"
+                        >
+
+                    </div>
+
+
+                    <div class="color-control">
+
+                        <label for="roadColor">
+                            Calles
+                        </label>
+
+                        <input
+                            type="color"
+                            id="roadColor"
+                            value="#D982A6"
+                        >
+
+                    </div>
+
+                </section>
+
+
+
+                <!-- =========================
+                     FORMA DEL MAPA
+                ========================== -->
+
+                <section class="control-section">
+
+                    <h2>
+                        Forma del mapa
+                    </h2>
+
+
+                    <div class="shape-options">
+
+
+                        <button
+                            type="button"
+                            id="squareMap"
+                            class="shape-option active"
+                        >
+
+                            <span class="shape-icon">
+                                ■
+                            </span>
+
+                            <span>
+                                Cuadrado
+                            </span>
+
+                        </button>
+
+
+
+                        <button
+                            type="button"
+                            id="circleMap"
+                            class="shape-option"
+                        >
+
+                            <span class="shape-icon">
+                                ●
+                            </span>
+
+                            <span>
+                                Circular
+                            </span>
+
+                        </button>
+
+
+
+                        <button
+                            type="button"
+                            id="fullMap"
+                            class="shape-option"
+                        >
+
+                            <span class="shape-icon">
+                                ▣
+                            </span>
+
+                            <span>
+                                Completo
+                            </span>
+
+                        </button>
+
+
+                    </div>
+
+                </section>
+
+
+
+                <!-- =========================
+                     ESTILO
+                ========================== -->
+
+                <section class="control-section">
+
+                    <h2>
+                        Estilo de mapa
+                    </h2>
+
+
+                    <label for="mapStyle">
+                        Mapa base
+                    </label>
+
+
+                    <select
+                        id="mapStyle"
+                        class="custom-select"
+                    >
+
+                        <option value="light">
+                            Claro
+                        </option>
+
+                        <option value="dark">
+                            Oscuro
+                        </option>
+
+                    </select>
+
+                </section>
+
+
+
+                <!-- =========================
+                     TEXTO
+                ========================== -->
+
+                <section class="control-section">
+
+                    <h2>
+                        Texto
+                    </h2>
+
+
+                    <label for="mapTitle">
+                        Nombre de la ciudad
+                    </label>
+
+
+                    <input
+                        type="text"
+                        id="mapTitle"
+                        placeholder="TRELEW"
+                    >
+
+
+                    <div class="color-control">
+
+                        <label for="textColor">
+                            Color del texto
+                        </label>
+
+                        <input
+                            type="color"
+                            id="textColor"
+                            value="#333333"
+                        >
+
+                    </div>
+
+
+                    <div class="color-control">
+
+                        <label for="coordinatesColor">
+                            Color de coordenadas
+                        </label>
+
+                        <input
+                            type="color"
+                            id="coordinatesColor"
+                            value="#888888"
+                        >
+
+                    </div>
+
+
+                    <p class="drag-help">
+
+                        Arrastrá los textos para
+                        ubicarlos donde quieras.
+
+                    </p>
+
+
+                    <button
+                        type="button"
+                        id="resetTextPosition"
+                        class="reset-position-button"
+                    >
+
+                        Restablecer posiciones
+
+                    </button>
+
+
+                    <label class="checkbox">
+
+                        <input
+                            type="checkbox"
+                            id="showCoordinates"
+                            checked
+                        >
+
+                        <span>
+                            Mostrar coordenadas
+                        </span>
+
+                    </label>
+
+                </section>
+
+
+
+                <!-- =========================
+                     GENERAR
+                ========================== -->
+
+                <section class="control-section">
+
+                    <button
+                        type="button"
+                        class="generate-button"
+                    >
+
+                        GENERAR LÁMINA
+
+                    </button>
+
+                </section>
+
+
+            </div>
+
+
+
+            <!-- =========================
+                 CONTROLES MAPA ESTELAR
+            ========================== -->
+
+            <div
+                id="starControls"
+                style="display: none;"
+            >
+
+
+                <!-- =========================
+                     UBICACIÓN ESTELAR
+                ========================== -->
+
+                <section class="control-section">
+
+                    <h2>
+                        Ubicación
+                    </h2>
+
+
+                    <label for="starCity">
+                        Ciudad o localidad
+                    </label>
+
+
+                    <input
+                        type="text"
+                        id="starCity"
+                        placeholder="Ej. Trelew"
+                    >
+
+
+                    <button
+                        type="button"
+                        id="starSearchButton"
+                    >
+
+                        Buscar lugar
+
+                    </button>
+
+                </section>
+
+
+
+                <!-- =========================
+                     MOMENTO
+                ========================== -->
+
+                <section class="control-section">
+
+                    <h2>
+                        Momento
+                    </h2>
+
+
+                    <label for="starDate">
+                        Fecha
+                    </label>
+
+
+                    <input
+                        type="date"
+                        id="starDate"
+                    >
+
+
+                    <label
+                        for="starTime"
+                        class="star-time-label"
+                    >
+                        Hora
+                    </label>
+
+
+                    <input
+                        type="time"
+                        id="starTime"
+                        value="22:00"
+                    >
+
+                </section>
+
+
+
+                <!-- =========================
+                     TEXTO ESTELAR
+                ========================== -->
+
+                <section class="control-section">
+
+                    <h2>
+                        Texto
+                    </h2>
+
+
+                    <label for="starTitle">
+                        Título
+                    </label>
+
+
+                    <input
+                        type="text"
+                        id="starTitle"
+                        placeholder="Ej. TRELEW"
+                    >
+
+                </section>
+
+
+
+                <!-- =========================
+                     ELEMENTOS DEL CIELO
+                ========================== -->
+
+                <section class="control-section">
+
+                    <h2>
+                        Elementos del cielo
+                    </h2>
+
+
+                    <label class="checkbox">
+
+                        <input
+                            type="checkbox"
+                            id="showConstellations"
+                            checked
+                        >
+
+                        <span>
+                            Mostrar constelaciones
+                        </span>
+
+                    </label>
+
+
+                    <label class="checkbox">
+
+                        <input
+                            type="checkbox"
+                            id="showConstellationNames"
+                            checked
+                        >
+
+                        <span>
+                            Mostrar nombres
+                        </span>
+
+                    </label>
+
+                </section>
+
+
+
+                <!-- =========================
+                     FORMA ESTELAR
+                ========================== -->
+
+                <section class="control-section">
+
+                    <h2>
+                        Forma del mapa
+                    </h2>
+
+
+                    <div class="shape-options">
+
+
+                        <button
+                            type="button"
+                            class="shape-option active"
+                        >
+
+                            <span class="shape-icon">
+                                ■
+                            </span>
+
+                            <span>
+                                Cuadrado
+                            </span>
+
+                        </button>
+
+
+
+                        <button
+                            type="button"
+                            class="shape-option"
+                        >
+
+                            <span class="shape-icon">
+                                ●
+                            </span>
+
+                            <span>
+                                Circular
+                            </span>
+
+                        </button>
+
+
+                    </div>
+
+                </section>
+
+
+
+                <!-- =========================
+                     GENERAR ESTELAR
+                ========================== -->
+
+                <section class="control-section">
+
+                    <button
+                        type="button"
+                        class="generate-button"
+                    >
+
+                        GENERAR LÁMINA
+
+                    </button>
+
+                </section>
+
+
+            </div>
+
+
+        </aside>
+
+
+
+        <!-- =========================
+             PREVISUALIZACIÓN
+        ========================== -->
+
+        <section class="preview">
+
+
+            <div
+                class="poster"
+                id="poster"
+            >
+
+
+                <div id="map"></div>
+
+                <div id="starMap"></div>
+
+
+                <div
+                    class="poster-info"
+                    id="posterInfo"
+                >
+
+                    <h2 id="posterTitle">
+                        TRELEW
+                    </h2>
+
+
+                    <p id="coordinates">
+                        -43.2533 · -65.3094
+                    </p>
+
+                </div>
+
+
+            </div>
+
+
+        </section>
+
+
+    </main>
+
+
+
+    <!-- =========================
+         SCRIPTS
+    ========================== -->
+
+    <script
+        src="https://unpkg.com/maplibre-gl@5/dist/maplibre-gl.js"
+
+<script src="https://cdn.jsdelivr.net/gh/drakkB/skyengine@main/sky-engine.js"></script>
+    ></script>
+
+    <script src="script.js"></script>
+
+
+</body>
+
+</html>
