@@ -36,7 +36,7 @@ const resetTextPosition = document.getElementById("resetTextPosition");
 /* --- MODO ESTELAR --- */
 const geographicMode = document.getElementById("geographicMode");
 const starMode = document.getElementById("starMode");
-const starMap = document.getElementById("starMap");
+const sky = document.getElementById("sky");
 const geographicControls = document.getElementById("geographicControls");
 const starControls = document.getElementById("starControls");
 
@@ -68,6 +68,7 @@ const map = new maplibregl.Map({
 });
 
 map.addControl(new maplibregl.NavigationControl(), "top-right");
+
 
 /* =========================
    ESTILOS Y OCULTAR ETIQUETAS
@@ -329,7 +330,7 @@ geographicMode.addEventListener("click", function () {
     starControls.style.display = "none";
 
     map.getContainer().style.display = "block";
-    starMap.style.display = "none";
+    sky.style.display = "none";
 
     posterTitle.textContent = titleInput.value.toUpperCase() || "TRELEW";
     map.resize();
@@ -343,7 +344,7 @@ starMode.addEventListener("click", function () {
     starControls.style.display = "block";
 
     map.getContainer().style.display = "none";
-    starMap.style.display = "block";
+    sky.style.display = "block";
 
     prepareStarMode();
     iniciarMapaEstelar();
@@ -359,27 +360,13 @@ function iniciarMapaEstelar() {
 
     console.log("Iniciando SkyEngine...");
 
-    const starContainer = document.getElementById("starMap");
-
-    // Crear el canvas solamente una vez
-    let canvas = starContainer.querySelector("canvas");
-
-    if (!canvas) {
-
-        canvas = document.createElement("canvas");
-
-        canvas.style.width = "100%";
-        canvas.style.height = "100%";
-        canvas.style.display = "block";
-
-        starContainer.appendChild(canvas);
-    }
+    const skyContainer = document.getElementById("sky");
 
     // Crear SkyEngine solamente una vez
     if (!starEngine) {
 
         starEngine = new SkyEngine(
-            canvas,
+            skyContainer,
             SKY,
             {
                 planets: false
