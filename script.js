@@ -175,8 +175,7 @@ searchButton.addEventListener("click", function () {
 
             posterTitle.textContent = city.toUpperCase();
             titleInput.value = city.toUpperCase();
-
-            coordinates.textContent = `\({currentLat.toFixed(4)} ·\){currentLng.toFixed(4)}`;
+            coordinates.textContent = `\(${currentLat.toFixed(4)} ·\)${currentLng.toFixed(4)}`;
             resetTextPositions();
         })
         .catch(err => {
