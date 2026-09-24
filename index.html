@@ -629,25 +629,80 @@
 
 
                 <!-- =========================
-                     GENERAR
-                ========================== -->
+     GENERAR
+========================= -->
 
-                <section class="control-section">
+<section class="control-section">
 
-                    <button
-                        type="button"
-                        class="generate-button"
-                    >
-
-                        GENERAR LÁMINA
-
-                    </button>
-
-                </section>
+    <h2>
+        Formato de lámina
+    </h2>
 
 
-            </div>
+    <label for="posterOrientation">
+        Orientación
+    </label>
 
+
+    <select
+        id="posterOrientation"
+        class="custom-select"
+    >
+
+        <option value="vertical">
+            Vertical
+        </option>
+
+        <option value="horizontal">
+            Horizontal
+        </option>
+
+    </select>
+
+
+    <label
+        for="exportFormat"
+        style="margin-top: 15px;"
+    >
+        Formato de archivo
+    </label>
+
+
+    <select
+        id="exportFormat"
+        class="custom-select"
+    >
+
+        <option value="png">
+            PNG
+        </option>
+
+        <option value="pdf">
+            PDF
+        </option>
+
+    </select>
+
+</section>
+
+
+<!-- =========================
+     GENERAR
+========================= -->
+
+<section class="control-section">
+
+    <button
+        type="button"
+        id="generateButton"
+        class="generate-button"
+    >
+
+        GENERAR LÁMINA
+
+    </button>
+
+</section>
 
 
             <!-- =========================
@@ -936,8 +991,9 @@
     <script src="https://unpkg.com/maplibre-gl@5/dist/maplibre-gl.js"></script>
     <script src="https://cdn.jsdelivr.net/gh/drakkB/skyengine@main/sky-data.js"></script>
     <script src="https://cdn.jsdelivr.net/gh/drakkB/skyengine@main/sky-engine.js"></script>
-    <script src="script.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 
+<script src="script.js"></script>
 
 </body>
 

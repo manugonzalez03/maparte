@@ -32,6 +32,8 @@ const circleMap = document.getElementById("circleMap");
 const fullMap = document.getElementById("fullMap");
 const mapStyleSelect = document.getElementById("mapStyle");
 const resetTextPosition = document.getElementById("resetTextPosition");
+const posterOrientation =
+    document.getElementById("posterOrientation");
 
 /* --- MODO ESTELAR --- */
 const geographicMode = document.getElementById("geographicMode");
@@ -424,3 +426,37 @@ function actualizarCielo() {
 
   // Escuchamos cuando el usuario cambia la fecha en el input
   starDate.addEventListener("change", actualizarCielo);
+
+  /* =========================
+   ORIENTACIÓN DE LA LÁMINA
+========================= */
+
+function actualizarOrientacion() {
+
+    if (posterOrientation.value === "horizontal") {
+
+        poster.classList.remove("vertical");
+        poster.classList.add("horizontal");
+
+    } else {
+
+        poster.classList.remove("horizontal");
+        poster.classList.add("vertical");
+    }
+
+    // MapLibre necesita recalcular su tamaño
+    setTimeout(function () {
+        map.resize();
+    }, 350);
+}
+
+
+posterOrientation.addEventListener(
+    "change",
+    actualizarOrientacion
+);
+
+
+/* Orientación inicial */
+
+poster.classList.add("vertical");

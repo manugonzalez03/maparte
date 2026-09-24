@@ -853,3 +853,17 @@ input[type="color"]::-moz-color-swatch {
 
     display: none;
 }
+
+/* =========================
+   ORIENTACIÓN DE LA LÁMINA
+========================= */
+
+.poster.horizontal {
+    width: min(700px, 90%);
+    height: min(500px, 80%);
+}
+
+.poster.vertical {
+    width: min(500px, 90%);
+    height: min(650px, 90%);
+}
